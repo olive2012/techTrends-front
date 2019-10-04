@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import TechTrendsApi from "../../Api/TechTrendsApi";
+import {Redirect} from "react-router-dom";
 
 const api = new TechTrendsApi();
 
@@ -11,9 +12,9 @@ const AppProvider = (props) => {
     const getAdverts = (criteria) => {
         // criteria === '*' is a special case which means
         // show all
-        if (!criteria && criteria !== "*"){
-             setState(oldState => ({...oldState, adverts: []}));
-             return;
+        if (!criteria && criteria !== "*") {
+            setState(oldState => ({...oldState, adverts: []}));
+            return;
         }
 
         api.getAdverts(criteria)
@@ -24,11 +25,11 @@ const AppProvider = (props) => {
     };
 
     const getAdvertsByTechnology = (technology) => {
-          if (!technology && technology !== "*"){
-             setState(oldState => ({...oldState, adverts: []}));
-             return;
+        if (!technology && technology !== "*") {
+            setState(oldState => ({...oldState, adverts: []}));
+            return;
         }
-            api.getAdvertsByTechnology(technology)
+        api.getAdvertsByTechnology(technology)
             .then(response => {
                 console.log(response);
                 setState(oldState => ({...oldState, adverts: response.data}));
@@ -50,9 +51,18 @@ const AppProvider = (props) => {
             setState(state => ({...state, loggedIn: true}));
             return true;
         }
-
         setState(state => ({...state, loggedIn: false}));
         return false;
+    };
+
+    const authPage = (loggedIn) => {
+        if (loggedIn) {
+            console.log("message from AuthPage OK");
+            return <Redirect to='/search-field'/>;
+        } else {
+            console.log("message from AuthPage NOT OK");
+            return <h3>User not loggedin</h3>;
+        }
     };
 
     const login = (username, password) => {
@@ -81,7 +91,7 @@ const AppProvider = (props) => {
             getAdvertsByTechnology: getAdvertsByTechnology,
             checkLoginState: checkLoginState,
             login: login,
-
+            authPage: authPage
         }
     };
 

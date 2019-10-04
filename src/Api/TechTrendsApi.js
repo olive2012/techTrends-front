@@ -41,18 +41,18 @@ export default class TechTrendsApi {
 
         // criteria === '*' is a special case which means
         // show all
-        if (criteria && criteria !== "*"){
+        if (criteria && criteria !== "*") {
             url += "/filter-by-criteria";
-            config.params = {criteria : criteria};
+            config.params = {criteria: criteria};
         }
         return this.apiInstance.get(url, config);
     }
 
-    getAdvertsByTechnology(technology){
+    getAdvertsByTechnology(technology) {
         let url = "/api/adverts/filter-technology";
         let config = {params: {}};
-        if (technology){
-          config.params = {technology : technology};
+        if (technology) {
+            config.params = {technology: technology};
         }
         return this.apiInstance.get(url, config);
     }
@@ -70,12 +70,11 @@ export default class TechTrendsApi {
             })
     }
 
-    login(username, password){
+    login(username, password) {
         let formData = new FormData();
         formData.set('username', username);
         formData.set('password', password);
         return this.apiInstance.post("/public/users/login", formData);
     }
-
 
 }

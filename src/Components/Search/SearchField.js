@@ -24,6 +24,7 @@ export default function SearchField() {
     };
 
     const getResultsByTechnology = () => {
+        console.log("technology " + searchField);
        setAppState(state => ({...state, technology: searchField}));
     };
 
@@ -46,6 +47,7 @@ export default function SearchField() {
 
 
     return (
+       <Grid centered>
         <div id="searchArea">
             <div class="ui icon input" id="searchFieldDiv">
                 <input id="searchFieldInput"
@@ -63,7 +65,10 @@ export default function SearchField() {
             <button className="ui button teal" onClick={showAllAdverts}>Rodyti visus skelbimus</button>
 
             <button className="ui button teal" onClick={getResultsByTechnology}>Ieškoti pagal technologiją</button>
-
         </div>
+
+           {appState.adverts.length > 0 && <AdvertList/>}
+
+       </Grid>
     );
 }
