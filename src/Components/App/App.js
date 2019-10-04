@@ -7,6 +7,7 @@ import PostsList from "../PostsList/PostsList";
 import {Container, Grid} from "semantic-ui-react";
 import SecretComponent from "../Secret/SecretComponent";
 import LoginForm from "../Login/LoginForm";
+import NavBar from "../Navigation/NavBar";
 
 function App() {
     const [appState, setAppState] = useContext(AppContext);
@@ -34,14 +35,14 @@ function App() {
     return (
         <div className="App">
             <Container>
+                <NavBar/>
                 {appState.loggedIn ? "Logged in" : "Not logged in"}
+                {appState.navigationItem === 'login' && <LoginForm/>}
                 <Grid centered id="searchElement">
                     <SearchField/>
-                    {/*<SecretComponent/>*/}
                     {appState.criteria === 'Kaunas' && <SecretComponent/>}
                     {appState.adverts.length > 0 && <AdvertList/>}
                 </Grid>
-                <LoginForm/>
             </Container>
             {/*<PostsList textColor="red"/>*/}
         </div>
@@ -52,3 +53,5 @@ export default App;
 
 //TODO convert in backend Set<Technology> to Set<String>
 //TODO make rows of adverts clickable (add link to whole row)
+//TODO pagination
+//TODO do not get expired adverts

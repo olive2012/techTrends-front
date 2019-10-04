@@ -8,18 +8,12 @@ export default function SearchField() {
     const [appState, setAppState] = useContext(AppContext);
     const [searchResults, setSearchResults] = useState([]);
 
-    //const handleResultSelect = (e, {result}) => this.setState({value: result.title})
-
-    // const handleSearchChange = (e, {value}) => {
-    //     this.setState({isLoading: true, value});
-
-
     const [searchField, setSearchField] = useState('');
 
     const onChange = (event) => {
         setSearchField(event.target.value);
         console.log("searchField: " + searchField);
-    }
+    };
 
     const showAllAdverts = () => {
         setAppState(state => ({...state, criteria: "*"}));
@@ -31,7 +25,7 @@ export default function SearchField() {
 
     const getResultsByTechnology = () => {
        setAppState(state => ({...state, technology: searchField}));
-    }
+    };
 
     const handleKeyPress = (event) => {
         //TODO show all results when criteria is empty and enter pressed
