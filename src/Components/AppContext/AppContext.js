@@ -68,6 +68,7 @@ const AppProvider = (props) => {
     const defaultState = {
         //adverts: [{title:"Programuotojas", id:1},{title:"Testuotojas", id:2}],
         adverts: [],
+        navigationItem: null,
         advertsCriteria: null,
         technology: null,
         posts: [],
