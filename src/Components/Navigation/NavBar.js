@@ -13,12 +13,17 @@ export default function NavBar() {
     //     console.log("activeItem " + activeItem);
     // };
 
+
     const handleItemClick = (event, {name}) => {
         setAppState(oldState => ({...oldState, navigationItem: name}));
         console.log("active NavigationItem " + appState.navigationItem);
         if (name === 'home'){
             setAppState(oldState => ({...oldState, adverts: []}));
         }
+        if (name === 'logout'){
+            appState.actions.logout();
+        }
+
     };
 
     return (
@@ -39,12 +44,23 @@ export default function NavBar() {
 
             <Menu.Menu position='right'>
 
-                <Menu.Item as={Link} to='/login'
+                {!appState.loggedIn?
+
+                < Menu.Item as = {Link} to='/login'
                     name='login'
                     active={appState.navigationItem === 'login'}
                     onClick={handleItemClick}
-                >Log In
-                </Menu.Item>
+                    >Log In
+                    </Menu.Item> :
+
+                  < Menu.Item
+                    name='logout'
+                    active={appState.navigationItem === 'logout'}
+                    onClick={handleItemClick}
+                    >Log Out
+                    </Menu.Item>
+
+                }
                 <Menu.Item as={Link} to='/signup'
                     name='signup'
                     active={appState.navigationItem === 'signup'}

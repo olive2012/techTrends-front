@@ -1,16 +1,14 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {AppContext} from "../AppContext/AppContext";
+import React, {useContext, useEffect} from 'react';
+import {AppContext, SEARCHBY} from "../AppContext/AppContext";
 import './App.css';
-import AdvertList from "../AdvertList/AdvertList";
-import {mount, route, lazy} from 'navi'
 import SearchField from "../Search/SearchField";
-import PostsList from "../PostsList/PostsList";
 import {Container, Grid} from "semantic-ui-react";
 import SecretComponent from "../Secret/SecretComponent";
 import LoginForm from "../Login/LoginForm";
 import NotFound from "../NotFound/NotFound";
 import NavBar from "../Navigation/NavBar";
-import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Redirect, Route, Switch, useHistory} from "react-router-dom";
+import {useRedirect, navigate} from 'hookrouter';
 
 
 function App() {
@@ -20,27 +18,60 @@ function App() {
     //      appState.actions.updatePosts();
     // },[appState.actions]);
 
-    useEffect(() => {
-        if (!appState.actions.checkLoginState()) {
-            appState.actions.login('suprem1@mail.ru', 'String1');
-        }
+    // useEffect(() => {
+    //     if (!appState.actions.checkLoginState()) {
+    //         appState.actions.login('suprem1@mail.ru', 'String1');
+    //     }
+    //
+    // }, [appState.actions]);
 
+    useEffect(() => {
+        appState.actions.checkLoginState();
     }, [appState.actions]);
 
-    useEffect(() => {
-        appState.actions.getAdverts(appState.criteria);
-    }, [appState.actions, appState.criteria]);
 
     useEffect(() => {
-        appState.actions.getAdvertsByTechnology(appState.technology);
-    }, [appState.actions, appState.technology]);
+        appState.actions.getAdverts(appState.searchBy, appState.advertsCriteria, appState.advertsTechnology);
+    }, [appState.actions, appState.searchBy, appState.advertsCriteria, appState.advertsTechnology]);
 
 
-    const authPage = () => {
+    useEffect(() => {
+        showAuthPage();
+    }, [appState.actions, appState.loggedIn]);
+
+
+    useEffect(() => {
+        if (appState.navigationItem === 'home') {
+            navigate('/search-field');
+        }
+    }, [appState.actions, appState.navigationItem]);
+
+    // const showAuthPage = () => {
+    //
+    //     if (appState.loggedIn) {
+    //         return <Redirect to="/"/>;
+    //     } else {
+    //         return <h3>User not loggedin</h3>;
+    //     }
+    // };
+
+    const redirect = useRedirect('/login', '/search-field');
+    //let history = useHistory();
+
+    const showAuthPage = () => {
         if (appState.loggedIn) {
-            return <Redirect to="/dashboard"/>;
+            console.log("message from AuthPage OK");
+
+            //navigate('/search-field', true);
+            setAppState(state => ({...state, navigationItem: 'home'}));
+            console.log("navigationItem " + appState.navigationItem);
+            //redirect();
+            //history.replace('/search-field');
+            console.log("message after navigate()");
+            //return <Redirect from='/login' to='/search-field'/>;
         } else {
-            return <h3>User not loggedin</h3>;
+            console.log("message from AuthPage NOT OK");
+            return <h3>User not loggedIn</h3>;
         }
     };
 
@@ -59,10 +90,11 @@ function App() {
                         {/*{appState.adverts.length > 0 && <AdvertList/>}*/}
                     </Grid>
                     <Switch>
+                        {/*<Redirect to={isLoggedIn ? "/wallet/portfolio" : "/wallet/login"}/>*/}
                         <Redirect exact from='/' to='/search-field'/>
                         <Route path="/search-field" exact component={SearchField}/>
                         <Route path="/login" exact component={LoginForm}/>
-                        <Route path="/not-found" exact component={NotFound}/>
+                        <Route component={NotFound}/>
                     </Switch>
 
                 </Container>
