@@ -44,6 +44,8 @@ export default class TechTrendsApi {
         if (criteria && criteria !== "*") {
             url += "/filter-by-criteria";
             config.params = {criteria: criteria};
+        } else {
+           url += "/active";
         }
         return this.apiInstance.get(url, config);
     }

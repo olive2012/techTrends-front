@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
-import {Button, Form, Grid, Header, Image, Message, Segment} from 'semantic-ui-react'
+import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react'
 import {AppContext} from "../AppContext/AppContext";
-import {Redirect} from "react-router-dom";
 
 export default function LoginForm() {
 
@@ -21,16 +20,11 @@ export default function LoginForm() {
     };
 
     const login = () => {
-        console.log("login");
         appState.actions.login(email, password);
-        console.log("login status " + appState.loggedIn);
-        appState.actions.authPage(appState.loggedIn);
-        console.log("message from LoginForm login method");
-
     };
 
-
     return (
+
         <Grid textAlign='center' style={{height: '100vh', marginTop: '50px'}}>
             <Grid.Column style={{maxWidth: 450}}>
                 <Header as='h2' color='teal' textAlign='center'>
@@ -46,6 +40,7 @@ export default function LoginForm() {
                             onChange={onChangePassword}/>
 
                         <Button color='teal' fluid size='large' onClick={login}>Login</Button>
+
                     </Segment>
                 </Form>
                 <Message>

@@ -1,8 +1,7 @@
-import React, {Component, useContext, useState} from 'react'
-import {AppContext} from "../AppContext/AppContext";
-import {Search, Grid, Header, Segment, Input, Button} from 'semantic-ui-react'
+import React, {useContext, useState} from 'react'
+import {AppContext, SEARCHBY} from "../AppContext/AppContext";
+import {Grid} from 'semantic-ui-react'
 import AdvertList from "../AdvertList/AdvertList";
-import axios from "axios";
 
 export default function SearchField() {
     const [appState, setAppState] = useContext(AppContext);
@@ -16,59 +15,53 @@ export default function SearchField() {
     };
 
     const showAllAdverts = () => {
-        setAppState(state => ({...state, criteria: "*"}));
+        setAppState(state => ({...state, searchBy: SEARCHBY.CRITERIA, advertsCriteria: '*'}));
     };
 
-    const getResultsByCriteria = () => {
-        setAppState(state => ({...state, criteria: searchField}));
+    const setCriteria = () => {
+        setAppState(state => ({...state, searchBy: SEARCHBY.CRITERIA, advertsCriteria: searchField}));
     };
 
-    const getResultsByTechnology = () => {
-        console.log("technology " + searchField);
-       setAppState(state => ({...state, technology: searchField}));
+    const setTechnology = () => {
+        setAppState(state => ({...state, searchBy: SEARCHBY.TECHNOLOGY, advertsTechnology: searchField}));
     };
 
     const handleKeyPress = (event) => {
         //TODO show all results when criteria is empty and enter pressed
         if (event.key === 'Enter') {
             setSearchField(event.target.value);
-            getResultsByCriteria();
+            if (searchField === "") {
+                setSearchField("*");
+                showAllAdverts();
+            } else {
+                setCriteria();
+            }
         }
     };
 
-
-    // return (
-    //   <div>
-    //     <h1>Hello React Function Component!</h1>
-    //     <input value={value} type="text" onChange={onChange} />
-    //     <p>{value}</p>
-    //   </div>
-    // );
-
-
     return (
-       <Grid centered>
-        <div id="searchArea">
-            <div class="ui icon input" id="searchFieldDiv">
-                <input id="searchFieldInput"
-                    type="text"
-                       placeholder="Search..."
-                       onChange={onChange}
-                       value={searchField}
-                       onKeyPress={handleKeyPress}/>
-                <i aria-hidden="true" class="search icon"></i>
+        <Grid centered>
+            <div id="searchArea">
+                <div class="ui icon input" id="searchFieldDiv">
+                    <input id="searchFieldInput"
+                           type="text"
+                           placeholder="Search..."
+                           onChange={onChange}
+                           value={searchField}
+                           onKeyPress={handleKeyPress}/>
+                    <i aria-hidden="true" class="search icon"></i>
+                </div>
+                <br/>
+
+                <button className="ui button teal" onClick={setCriteria}>Ieškoti pagal kriterijus</button>
+
+                <button className="ui button teal" onClick={showAllAdverts}>Rodyti visus skelbimus</button>
+
+                <button className="ui button teal" onClick={setTechnology}>Ieškoti pagal technologiją</button>
             </div>
-            <br/>
 
-            <button className="ui button teal" onClick={getResultsByCriteria}>Ieškoti pagal kriterijus</button>
+            {appState.adverts.length > 0 && <AdvertList/>}
 
-            <button className="ui button teal" onClick={showAllAdverts}>Rodyti visus skelbimus</button>
-
-            <button className="ui button teal" onClick={getResultsByTechnology}>Ieškoti pagal technologiją</button>
-        </div>
-
-           {appState.adverts.length > 0 && <AdvertList/>}
-
-       </Grid>
+        </Grid>
     );
 }

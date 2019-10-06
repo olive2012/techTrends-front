@@ -27,7 +27,7 @@ function AdvertList() {
 
                 <Table.Body>
                     {appState.adverts.map(advert =>
-                        <Table.Row key={advert.id}>
+                        <Table.Row key={advert.id} >
                             <Table.Cell>{advert.advertTitle}</Table.Cell>
                             <Table.Cell>{advert.companyName}</Table.Cell>
                             <Table.Cell>{advert.city}</Table.Cell>
@@ -35,8 +35,6 @@ function AdvertList() {
                             <Table.Cell>{advert.maxSalary}</Table.Cell>
                             <Table.Cell>{advert.dateExpiring}</Table.Cell>
                             <Table.Cell>{advert.technologies.map((technology, index) => <span key={index}>{technology}{index < advert.technologies.length - 1 ? ', ' : ''}</span>)
-
-
 
                             }</Table.Cell>
                         </Table.Row>)}
