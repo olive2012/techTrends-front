@@ -104,8 +104,12 @@ const AppProvider = (props) => {
         //setState(state => ({state: defaultState}));
         setState(state => ({...state, adverts: [], navigationItem: 'home', advertsCriteria: '', advertsTechnology: '', loggedIn: false}));
         //useRedirect('/', '/');
-        return navigate('/search-field');
+        return navigate('/');
         //return <Redirect to='/search-field'/>;
+    };
+
+    const registerNewUser = () => {
+
     };
 
 
@@ -127,6 +131,7 @@ const AppProvider = (props) => {
             checkLoginState: checkLoginState,
             login: login,
             logout: logout,
+            registerNewUser: registerNewUser
             // showAuthPage: showAuthPage
         }
     };

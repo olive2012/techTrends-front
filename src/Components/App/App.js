@@ -1,19 +1,19 @@
 import React, {useContext, useEffect} from 'react';
-import {AppContext, SEARCHBY} from "../AppContext/AppContext";
+import {AppContext} from "../AppContext/AppContext";
 import './App.css';
 import SearchField from "../Search/SearchField";
-import {Container, Grid} from "semantic-ui-react";
-import SecretComponent from "../Secret/SecretComponent";
+import {Container, Menu} from "semantic-ui-react";
 import LoginForm from "../Login/LoginForm";
 import NotFound from "../NotFound/NotFound";
-import NavBar from "../Navigation/NavBar";
-import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
-import {Redirect} from "react-router-dom";
-import {useRedirect, navigate, useRoutes, A} from 'hookrouter';
+import {A, navigate, useRoutes} from 'hookrouter';
+import Statistics from "../Statistics/Statistics";
+import SignUpForm from "../Signup/SignUpForm";
 
 const routes = {
-    "/search-field": () => <SearchField/>,
+    "/": () => <SearchField/>,
+    "/statistics": () => <Statistics/>,
     "/login": () => <LoginForm/>,
+    "/signup": () => <SignUpForm/>,
     // "/form": () => <Contact />
 };
 
@@ -62,28 +62,33 @@ function App() {
     }, [appState.actions, appState.searchBy, appState.advertsCriteria, appState.advertsTechnology]);
 
 
-    // const redirect = () => {
-    //     return (<Redirect exact from='/' to='/search-field'/>);
-    // };
-
     //const redirect = useRedirect('/login', '/search-field');
-    //let history = useHistory();
+
 
     const showAuthPage = () => {
         if (appState.loggedIn) {
             console.log("message from AuthPage OK");
-
-            navigate('/search-field');
+            navigate('/');
             setAppState(state => ({...state, navigationItem: 'home'}));
             console.log("navigationItem " + appState.navigationItem);
-            //redirect();
-            //history.replace('/search-field');
-            console.log("message after navigate()");
-            return (<Redirect to={{pathname: '/search-field'}}/>);
+
+            // return (<Redirect to={{pathname: '/search-field'}}/>);
         } else {
             console.log("message from AuthPage NOT OK");
             return <h3>User not loggedIn</h3>;
         }
+    };
+
+    const handleItemClick = (event, {name}) => {
+        setAppState(oldState => ({...oldState, navigationItem: name}));
+        console.log("active NavigationItem " + appState.navigationItem);
+        if (name === 'home') {
+            setAppState(oldState => ({...oldState, adverts: []}));
+        }
+        if (name === 'logout') {
+            appState.actions.logout();
+        }
+
     };
 
     return (
@@ -116,13 +121,41 @@ function App() {
             {/*</BrowserRouter>*/}
 
 
+            <Container>
+                <Menu>
+                    {/*     <Menu.Item as={Link} to='/search-field' name='home'*/}
+                    {/*active={appState.navigationItem === 'home'}>Home</Menu.Item>*/}
+
+                    <Menu.Item name='home' active={appState.navigationItem === 'home'} onClick={handleItemClick}>
+                        <A href="/">Home Page</A>
+                    </Menu.Item>
+
+                    <Menu.Item name='statistics' active={appState.navigationItem === 'statistics'} onClick={handleItemClick}>
+                        <A href="/statistics">Statistics</A>
+                    </Menu.Item>
+
+                    <Menu.Menu position='right'>
+
+                        {!appState.loggedIn ?
+
+                            <Menu.Item name='login' active={appState.navigationItem === 'login'} onClick={handleItemClick}>
+                                <A href="/login">Log In</A>
+                            </Menu.Item> :
+
+                            <Menu.Item name='logout' active={appState.navigationItem === 'logout'} onClick={handleItemClick}>
+                                <A href="/logout">Log Out</A>
+                            </Menu.Item>}
+
+                        <Menu.Item name='signup' active={appState.navigationItem === 'signup'} onClick={handleItemClick}>
+                            <A href="/signup">Sign Up</A></Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+
                 {appState.loggedIn ? "Logged in" : "Not logged in"}
 
-                <A href="/search-field">Home Page</A>
-                <A href="/login">Login</A>
-                {/*<A href="/contact">Contacts Page</A>*/}
                 {routeResult || <NotFound/>}
 
+            </Container>
 
             {/*<PostsList textColor="red"/>*/}
 
