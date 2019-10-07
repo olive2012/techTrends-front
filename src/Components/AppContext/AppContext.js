@@ -138,7 +138,6 @@ const AppProvider = (props) => {
             {props.children}
         </AppContext.Provider>
     );
-
 };
 
 export {AppContext, AppProvider};

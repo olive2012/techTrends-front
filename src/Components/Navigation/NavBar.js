@@ -70,5 +70,4 @@ export default function NavBar() {
             </Menu.Menu>
         </Menu>
     )
-    // }
 }
