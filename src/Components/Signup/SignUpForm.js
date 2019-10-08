@@ -15,7 +15,6 @@ export default function SignUpForm() {
         console.log("email: " + inputs.email + ", password: " + inputs.password + ", reentered value: " + inputs.reenteredPassword);
     };
 
-
     const handleSubmit = () => {
         if (inputs.password === inputs.reenteredPassword) {
             inputs.email && inputs.reenteredPassword && appState.actions.registerNewUser(inputs.email, inputs.reenteredPassword);
@@ -37,15 +36,18 @@ export default function SignUpForm() {
                 </Header>
                 <Form size='large' onSubmit={handleSubmit}>
                     <Segment stacked>
-                        <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' name='email' value={inputs.email}
+                        <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' name='email'
+                                    value={inputs.email}
                                     onChange={handleInputChange}/>
 
                         <Form.Input
-                            fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password' value={inputs.password}
+                            fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password'
+                            value={inputs.password}
                             onChange={handleInputChange}/>
 
                         <Form.Input
-                            fluid icon='lock' iconPosition='left' placeholder='Confirm Your Password' type='password' value={inputs.reenteredPassword}
+                            fluid icon='lock' iconPosition='left' placeholder='Confirm Your Password' type='password'
+                            value={inputs.reenteredPassword}
                             name='reenteredPassword'
                             onChange={handleInputChange}/>
 
