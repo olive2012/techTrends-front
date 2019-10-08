@@ -19,13 +19,14 @@ export default function SignUpForm() {
     const handleSubmit = () => {
         if (inputs.password === inputs.reenteredPassword) {
             inputs.email && inputs.reenteredPassword && appState.actions.registerNewUser(inputs.email, inputs.reenteredPassword);
+            setInputs(oldState => ({email: '', password: '', reenteredPassword: ''}));
+            console.log(inputs.email + " " + inputs.password);
         } else {
             console.log("email: " + inputs.email + ", password: " + inputs.password + ", reentered value: " + inputs.reenteredPassword);
             window.alert("Your entered password does not match repeated value");
         }
 
     };
-    //TODO clear input fields after registration
 
     return (
 
