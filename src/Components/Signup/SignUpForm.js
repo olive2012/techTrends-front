@@ -1,39 +1,31 @@
 import React, {useContext, useState} from 'react';
-import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react'
+import {Button, Form, Grid, Header, Segment} from 'semantic-ui-react'
 import {AppContext} from "../AppContext/AppContext";
-import {navigate} from "hookrouter";
 
 export default function SignUpForm() {
 
     const [appState, setAppState] = useContext(AppContext);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatedPassword, setRepeatedPassword] = useState('');
+    const [inputs, setInputs] = useState({});
 
-    const onChangeEmail = (event) => {
-        setEmail(event.target.value);
-        console.log("email: " + email);
+
+    const handleInputChange = (event) => {
+        event.persist();
+        setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
+        console.log("email: " + inputs.email + ", password: " + inputs.password + ", reentered value: " + inputs.reenteredPassword);
     };
 
-    const onChangePassword = (event) => {
-        setPassword(event.target.value);
-        console.log("password: " + password);
-    };
-
-    const onChangeRepeatedPassword = (event) => {
-        if (password === event.target.value){
-          setRepeatedPassword(event.target.value);
-          console.log("repeated password: " + repeatedPassword);
-        } else {
-            console.log("password: " + password + ", repeated value: " + event.target.value);
-            window.alert("Your entered password does not match with repeated value");
-        }
-    };
 
     const handleSubmit = () => {
-        email && repeatedPassword && appState.actions.registerNewUser(email, repeatedPassword);
+        if (inputs.password === inputs.reenteredPassword) {
+            inputs.email && inputs.reenteredPassword && appState.actions.registerNewUser(inputs.email, inputs.reenteredPassword);
+        } else {
+            console.log("email: " + inputs.email + ", password: " + inputs.password + ", reentered value: " + inputs.reenteredPassword);
+            window.alert("Your entered password does not match repeated value");
+        }
+
     };
+    //TODO clear input fields after registration
 
     return (
 
@@ -44,18 +36,19 @@ export default function SignUpForm() {
                 </Header>
                 <Form size='large' onSubmit={handleSubmit}>
                     <Segment stacked>
-                        <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address'
-                                    onChange={onChangeEmail}/>
+                        <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' name='email' value={inputs.email}
+                                    onChange={handleInputChange}/>
 
                         <Form.Input
-                            fluid icon='lock' iconPosition='left' placeholder='Password' type='password'
-                            onChange={onChangePassword}/>
+                            fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password' value={inputs.password}
+                            onChange={handleInputChange}/>
 
                         <Form.Input
-                            fluid icon='lock' iconPosition='left' placeholder='Repeat Your Password' type='password'
-                            onChange={onChangeRepeatedPassword}/>
+                            fluid icon='lock' iconPosition='left' placeholder='Confirm Your Password' type='password' value={inputs.reenteredPassword}
+                            name='reenteredPassword'
+                            onChange={handleInputChange}/>
 
-                        <Button color='teal' fluid size='large' onClick={handleSubmit} content='Submit'/>
+                        <Button color='teal' fluid size='large' type="submit" content='Submit'/>
 
                     </Segment>
                 </Form>

@@ -102,16 +102,31 @@ const AppProvider = (props) => {
     const logout = () => {
         window.localStorage.clear();
         //setState(state => ({state: defaultState}));
-        setState(state => ({...state, adverts: [], navigationItem: 'home', advertsCriteria: '', advertsTechnology: '', loggedIn: false}));
+        setState(state => ({
+            ...state,
+            adverts: [],
+            navigationItem: 'home',
+            advertsCriteria: '',
+            advertsTechnology: '',
+            loggedIn: false
+        }));
         //useRedirect('/', '/');
         return navigate('/');
         //return <Redirect to='/search-field'/>;
     };
 
-    const registerNewUser = () => {
+    const registerNewUser = (username, password) => {
+        api.registerNewUser(username, password)
+            .then(response => {
+                window.alert(response.data)
+            })
+            .catch(error => {
+                console.log("registerNewUser error: ");
+                console.log(error.data);
+                window.alert(error.data);
+            })
 
     };
-
 
     const defaultState = {
         //adverts: [{title:"Programuotojas", id:1},{title:"Testuotojas", id:2}],

@@ -3,7 +3,7 @@ import axios from "axios";
 export default class TechTrendsApi {
     apiInstance = axios.create({
         baseURL: '/',
-        timeout: 1000,
+        timeout: 5000,
     });
 
     constructor() {
@@ -45,7 +45,7 @@ export default class TechTrendsApi {
             url += "/filter-by-criteria";
             config.params = {criteria: criteria};
         } else {
-           url += "/active";
+            url += "/active";
         }
         return this.apiInstance.get(url, config);
     }
@@ -77,6 +77,13 @@ export default class TechTrendsApi {
         formData.set('username', username);
         formData.set('password', password);
         return this.apiInstance.post("/public/users/login", formData);
+    }
+
+    registerNewUser(username, password) {
+        let formData = new FormData();
+        formData.set('email', username);
+        formData.set('password', password);
+        return this.apiInstance.post("/public/users/registration", formData);
     }
 
 }
