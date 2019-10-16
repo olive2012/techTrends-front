@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import TechTrendsApi from "../../Api/TechTrendsApi";
-import {Redirect} from "react-router-dom";
-import {navigate, useRedirect} from "hookrouter";
+import {navigate} from "hookrouter";
 
 const api = new TechTrendsApi();
 
@@ -96,12 +95,13 @@ const AppProvider = (props) => {
                 console.log("message from login, login token -" + response.data);
                 checkLoginState();
             })
-
+            .catch(error => {
+                window.alert("The e-mail address and/or password you specified are not correct.")
+            })
     };
 
     const logout = () => {
         window.localStorage.clear();
-        //setState(state => ({state: defaultState}));
         setState(state => ({
             ...state,
             adverts: [],
@@ -110,9 +110,7 @@ const AppProvider = (props) => {
             advertsTechnology: '',
             loggedIn: false
         }));
-        //useRedirect('/', '/');
         return navigate('/');
-        //return <Redirect to='/search-field'/>;
     };
 
     const registerNewUser = (username, password) => {
@@ -125,7 +123,6 @@ const AppProvider = (props) => {
                 console.log(error.data);
                 window.alert(error.data);
             })
-
     };
 
     const defaultState = {
@@ -139,8 +136,6 @@ const AppProvider = (props) => {
         loggedIn: false,
         searchBy: SEARCHBY.CRITERIA,
         actions: {
-            // updatePosts: updatePosts,
-            // renewPosts: renewPosts,
             getAdverts: getAdverts,
             getAdvertsByTechnology: getAdvertsByTechnology,
             checkLoginState: checkLoginState,
