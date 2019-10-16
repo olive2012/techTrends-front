@@ -6,21 +6,24 @@ export default function LoginForm() {
 
     const [appState, setAppState] = useContext(AppContext);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [email, setEmail] = useState('');
 
-    const onChangeEmail = (event) => {
-        setEmail(event.target.value);
-        console.log("email: " + email);
+    const [inputs, setInputs] = useState({});
+
+    const handleInputChange = (event) => {
+        event.persist();
+        setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
+        console.log("email: " + inputs.email + ", password: " + inputs.password);
     };
 
-    const onChangePassword = (event) => {
-        setPassword(event.target.value);
-        console.log("password: " + password);
-    };
+    // const onChangeEmail = (event) => {
+    //     setEmail(event.target.value);
+    //     console.log("email: " + email);
+    // };
 
     const login = () => {
-        appState.actions.login(email, password);
+        appState.actions.login(inputs.email, inputs.password);
+        setInputs(oldState => ({email: '', password: ''}));
     };
 
     return (
@@ -30,16 +33,18 @@ export default function LoginForm() {
                 <Header as='h2' color='teal' textAlign='center'>
                     Log-in to your account
                 </Header>
-                <Form size='large'>
+                <Form size='large' onSubmit={login}>
                     <Segment stacked>
                         <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address'
-                                    onChange={onChangeEmail}/>
+                                    name='email' value={inputs.email}
+                                    onChange={handleInputChange}/>
 
                         <Form.Input
                             fluid icon='lock' iconPosition='left' placeholder='Password' type='password'
-                            onChange={onChangePassword}/>
+                            name='password' value={inputs.password}
+                            onChange={handleInputChange}/>
 
-                        <Button color='teal' fluid size='large' onClick={login}>Login</Button>
+                        <Button color='teal' fluid size='large' type="submit">Login</Button>
 
                     </Segment>
                 </Form>
@@ -50,5 +55,3 @@ export default function LoginForm() {
         </Grid>
     )
 };
-
-// export default LoginForm
