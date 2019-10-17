@@ -35,29 +35,52 @@ export default class TechTrendsApi {
         );
     }
 
-    getAdverts(criteria) {
+    // getAdvertsByCriteria(advertsByCity, advertsByTechnology, advertsBySalary){
+    //     let url = "/api/adverts/active";
+    //     let config = {params: {}};
+    //     return this.apiInstance.get(url, config);
+    // }
+
+    // getAdverts(criteria) {
+    //     let url = "/api/adverts";
+    //     let config = {params: {}};
+    //
+    //     // criteria === '*' is a special case which means
+    //     // show all
+    //     if (criteria && criteria !== "*") {
+    //         url += "/filter-by-criteria";
+    //         config.params = {criteria: criteria};
+    //     } else {
+    //         url += "/active";
+    //     }
+    //     return this.apiInstance.get(url, config);
+    // }
+
+        getAdvertsVersion2(city, salary, technology) {
+        console.log("From TechTrendsApi method getAdvertsVersion2. city: " + city + ", salary: " + salary + " , technology: " + technology);
         let url = "/api/adverts";
         let config = {params: {}};
 
         // criteria === '*' is a special case which means
         // show all
-        if (criteria && criteria !== "*") {
-            url += "/filter-by-criteria";
-            config.params = {criteria: criteria};
-        } else {
-            url += "/active";
+        if (technology) {
+            url += "/filter-technology";
+            config.params = {technology: technology};
         }
+        // if (city || salary) {
+        //     url += "/active";
+        // }
         return this.apiInstance.get(url, config);
     }
 
-    getAdvertsByTechnology(technology) {
-        let url = "/api/adverts/filter-technology";
-        let config = {params: {}};
-        if (technology) {
-            config.params = {technology: technology};
-        }
-        return this.apiInstance.get(url, config);
-    }
+    // getAdvertsByTechnology(technology) {
+    //     let url = "/api/adverts/filter-technology";
+    //     let config = {params: {}};
+    //     if (technology) {
+    //         config.params = {technology: technology};
+    //     }
+    //     return this.apiInstance.get(url, config);
+    // }
 
     async checkToken(token) {
         console.log("Checking token " + token);

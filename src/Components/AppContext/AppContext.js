@@ -57,6 +57,34 @@ const AppProvider = (props) => {
             })
     };
 
+    const getAdvertsVersion2 = (city, salary, technology) => {
+           // if (!criteria && criteria !== "*") {
+           //          setState(oldState => ({...oldState, adverts: []}));
+           //          return;
+           //      };
+           if (technology) {
+                   api.getAdvertsVersion2(city, salary, technology)
+                    .then(response => {
+                        console.log(response);
+                        let filtered = response.data;
+
+                        if (city){
+                            console.log("city: " + city);
+                            filtered = response.data.filter(advert => advert.city === city);
+                            console.log("filtered: " + filtered);
+                            if (salary){
+                                console.log("salary: " + salary);
+                                filtered = filtered.filter(advert => advert.minSalary >= salary);
+                                console.log("filtered: " + filtered);
+                            }
+                        }
+                        setState(oldState => ({...oldState, adverts: filtered}));
+                    });
+           } else {
+               console.log( "from apiContext else");
+           }
+    };
+
     //method for checking if user is logged in. If no - returns false
     const checkLoginState = () => {
         console.log("message from checkLoginState");
@@ -105,10 +133,14 @@ const AppProvider = (props) => {
         setState(state => ({
             ...state,
             adverts: [],
+            filteredAdverts: [],
             navigationItem: 'home',
             advertsCriteria: '',
             advertsTechnology: '',
-            loggedIn: false
+            loggedIn: false,
+            advertsByCity: '',
+            advertsByTechnology: '',
+            advertsBySalary: ''
         }));
         return navigate('/');
     };
@@ -131,13 +163,19 @@ const AppProvider = (props) => {
         navigationItem: null,
         advertsCriteria: null,
         advertsTechnology: null,
-        posts: [],
+
+        advertsByCity: null,
+        advertsBySalary: null,
+        advertsByTechnology: null,
+
+        //posts: [],
         // api: api,
         loggedIn: false,
         searchBy: SEARCHBY.CRITERIA,
         actions: {
             getAdverts: getAdverts,
             getAdvertsByTechnology: getAdvertsByTechnology,
+            getAdvertsVersion2: getAdvertsVersion2,
             checkLoginState: checkLoginState,
             login: login,
             logout: logout,

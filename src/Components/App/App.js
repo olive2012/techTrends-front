@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {AppContext} from "../AppContext/AppContext";
 import './App.css';
 import SearchField from "../Search/SearchField";
+import SearchField2 from "../Search/SearchField2";
 import {Container, Menu} from "semantic-ui-react";
 import LoginForm from "../Login/LoginForm";
 import NotFound from "../NotFound/NotFound";
@@ -10,7 +11,7 @@ import Statistics from "../Statistics/Statistics";
 import SignUpForm from "../Signup/SignUpForm";
 
 const routes = {
-    "/": () => <SearchField/>,
+    "/": () => <SearchField2/>,
     "/statistics": () => <Statistics/>,
     "/login": () => <LoginForm/>,
     "/signup": () => <SignUpForm/>,
@@ -58,8 +59,13 @@ function App() {
 
 
     useEffect(() => {
-        appState.actions.getAdverts(appState.searchBy, appState.advertsCriteria, appState.advertsTechnology);
-    }, [appState.actions, appState.searchBy, appState.advertsCriteria, appState.advertsTechnology]);
+        appState.actions.getAdvertsVersion2(appState.advertsByCity, appState.advertsBySalary, appState.advertsByTechnology);
+    }, [appState.actions, appState.advertsByCity, appState.advertsBySalary, appState.advertsByTechnology]);
+
+
+    //  useEffect(() => {
+    //     appState.actions.getAdverts(appState.searchBy, appState.advertsCriteria, appState.advertsTechnology);
+    // }, [appState.actions, appState.searchBy, appState.advertsCriteria, appState.advertsTechnology]);
 
 
     //const redirect = useRedirect('/login', '/search-field');
