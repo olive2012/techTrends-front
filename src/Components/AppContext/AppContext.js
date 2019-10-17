@@ -45,6 +45,14 @@ const AppProvider = (props) => {
         }
     };
 
+    const getAllAdverts = () => {
+        api.getAllAdverts()
+            .then(response => {
+                console.log(response);
+                setState(oldState => ({...oldState, allAdverts: response.data}));
+            })
+    }
+
     const getAdvertsByTechnology = (technology) => {
         if (!technology) {
             setState(oldState => ({...oldState, adverts: []}));
@@ -58,31 +66,46 @@ const AppProvider = (props) => {
     };
 
     const getAdvertsVersion2 = (city, salary, technology) => {
-           // if (!criteria && criteria !== "*") {
-           //          setState(oldState => ({...oldState, adverts: []}));
-           //          return;
-           //      };
-           if (technology) {
-                   api.getAdvertsVersion2(city, salary, technology)
-                    .then(response => {
-                        console.log(response);
-                        let filtered = response.data;
+        // if (!criteria && criteria !== "*") {
+        //          setState(oldState => ({...oldState, adverts: []}));
+        //          return;
+        //      };
+        if (technology) {
+            api.getAdvertsByTechnology(city, salary, technology)
+                .then(response => {
+                    console.log(response);
+                    let filteredAdverts = response.data;
 
-                        if (city){
-                            console.log("city: " + city);
-                            filtered = response.data.filter(advert => advert.city === city);
-                            console.log("filtered: " + filtered);
-                            if (salary){
-                                console.log("salary: " + salary);
-                                filtered = filtered.filter(advert => advert.minSalary >= salary);
-                                console.log("filtered: " + filtered);
-                            }
-                        }
-                        setState(oldState => ({...oldState, adverts: filtered}));
-                    });
-           } else {
-               console.log( "from apiContext else");
-           }
+                    if (city && salary) {
+                        console.log("city: " + city + ", salary: " + salary);
+                        filteredAdverts = response.data.filter(advert => advert.city === city && advert.minSalary >= salary);
+                    } else if (city) {
+                        console.log("city: " + city);
+                        filteredAdverts = response.data.filter(advert => advert.city === city);
+                    } else if (salary) {
+                        console.log("city: " + city);
+                        filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
+                    }
+                    setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                });
+        } else {
+            api.getAllAdverts()
+                .then(response => {
+                    if (city && salary) {
+                        let filteredAdverts = response.data.filter(advert => advert.city === city && advert.minSalary >= salary);
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else if (city) {
+                        let filteredAdverts = response.data.filter(advert => advert.city === city);
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else if (salary) {
+                        let filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else {
+                        setState(oldState => ({...oldState, adverts: []}));
+                        console.log("No criteria")
+                    }
+                })
+        }
     };
 
     //method for checking if user is logged in. If no - returns false
@@ -133,6 +156,7 @@ const AppProvider = (props) => {
         setState(state => ({
             ...state,
             adverts: [],
+            allAdverts: [],
             filteredAdverts: [],
             navigationItem: 'home',
             advertsCriteria: '',
@@ -174,6 +198,7 @@ const AppProvider = (props) => {
         searchBy: SEARCHBY.CRITERIA,
         actions: {
             getAdverts: getAdverts,
+            getAllAdverts: getAllAdverts,
             getAdvertsByTechnology: getAdvertsByTechnology,
             getAdvertsVersion2: getAdvertsVersion2,
             checkLoginState: checkLoginState,

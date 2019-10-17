@@ -41,8 +41,8 @@ export default function SearchField() {
 
     return (
         <Grid centered>
-            <div id="searchArea">
-                <div class="ui icon input" id="searchFieldDiv">
+            <div id="searchArea1">
+                <div class="ui icon input" id="searchFieldDiv1">
                     <input id="searchFieldInput"
                            type="text"
                            placeholder="Search..."

@@ -59,6 +59,11 @@ function App() {
 
 
     useEffect(() => {
+        appState.actions.getAllAdverts();
+    }, [appState.actions]);
+
+
+    useEffect(() => {
         appState.actions.getAdvertsVersion2(appState.advertsByCity, appState.advertsBySalary, appState.advertsByTechnology);
     }, [appState.actions, appState.advertsByCity, appState.advertsBySalary, appState.advertsByTechnology]);
 

@@ -41,6 +41,15 @@ export default function SearchField() {
             advertsByCity: searchByCity, advertsBySalary: searchBySalary, advertsByTechnology: searchByTechnology}));
     };
 
+    const clearAllCriteria = () => {
+       setAppState(state => ({...state,
+            // searchBy: SEARCHBY.CRITERIA, advertsCriteria: searchField,
+            advertsByCity: '', advertsBySalary: '', advertsByTechnology: '', adverts: []}));
+       setSearchByCity('');
+       setSearchBySalary('');
+       setSearchByTechnology('');
+    };
+
     // const setTechnology = () => {
     //     setAppState(state => ({...state, searchBy: SEARCHBY.TECHNOLOGY, advertsTechnology: searchField}));
     // };
@@ -89,17 +98,15 @@ export default function SearchField() {
                            placeholder="Dominanti technologija..."
                            onChange={onChangeTechnology}
                            name='technology' value={searchByTechnology}
-                        //onKeyPress={handleKeyPress}
                     />
                     <i aria-hidden="true" className="search icon"></i>
                 </div>
                 <br/>
 
-                <button className="ui button teal" onClick={setCriteria}>Ieškoti</button>
+                <button className="ui button teal" onClick={setCriteria}>Ieškoti pagal kriterijus</button>
 
-                {/*<button className="ui button teal" onClick={showAllAdverts}>Rodyti visus skelbimus</button>*/}
+                <button className="ui button teal" onClick={clearAllCriteria}>Išvalyti filtrus</button>
 
-                {/*<button className="ui button teal" onClick={setTechnology}>Ieškoti pagal technologiją</button>*/}
             </div>
 
             {appState.adverts.length > 0 && <AdvertList/>}

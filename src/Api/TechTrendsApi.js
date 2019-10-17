@@ -35,11 +35,11 @@ export default class TechTrendsApi {
         );
     }
 
-    // getAdvertsByCriteria(advertsByCity, advertsByTechnology, advertsBySalary){
-    //     let url = "/api/adverts/active";
-    //     let config = {params: {}};
-    //     return this.apiInstance.get(url, config);
-    // }
+    getAllAdverts(){
+        let url = "/api/adverts/active";
+        //let config = {params: {}};
+        return this.apiInstance.get(url);
+    }
 
     // getAdverts(criteria) {
     //     let url = "/api/adverts";
@@ -56,7 +56,7 @@ export default class TechTrendsApi {
     //     return this.apiInstance.get(url, config);
     // }
 
-        getAdvertsVersion2(city, salary, technology) {
+        getAdvertsByTechnology(city, salary, technology) {
         console.log("From TechTrendsApi method getAdvertsVersion2. city: " + city + ", salary: " + salary + " , technology: " + technology);
         let url = "/api/adverts";
         let config = {params: {}};
@@ -67,9 +67,6 @@ export default class TechTrendsApi {
             url += "/filter-technology";
             config.params = {technology: technology};
         }
-        // if (city || salary) {
-        //     url += "/active";
-        // }
         return this.apiInstance.get(url, config);
     }
 
