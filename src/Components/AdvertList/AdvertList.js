@@ -4,11 +4,17 @@ import {Table} from "semantic-ui-react";
 
 function AdvertList() {
     const [appState, setAppState] = useContext(AppContext);
+    const [activePage, setActivePage] = useState(1);
 
     const deleteAd = (id) => {
         let newAdverts = appState.adverts.filter(a => a.id !== id);
         setAppState(oldState => ({...oldState, adverts: newAdverts}));
     };
+    //
+    // const onChange = (e, pageInfo) => {
+    //     setActivePage(pageInfo.activePage);
+    //     setApiUrl('https://swapi.co/api/people/?page=' + page.activePage.toString());
+    // };
 
     return (
         <div>
@@ -27,14 +33,15 @@ function AdvertList() {
 
                 <Table.Body>
                     {appState.adverts.map(advert =>
-                        <Table.Row key={advert.id} >
+                        <Table.Row key={advert.id}>
                             <Table.Cell>{advert.advertTitle}</Table.Cell>
                             <Table.Cell>{advert.companyName}</Table.Cell>
                             <Table.Cell>{advert.city}</Table.Cell>
                             <Table.Cell>{advert.minSalary}</Table.Cell>
                             <Table.Cell>{advert.maxSalary}</Table.Cell>
                             <Table.Cell>{advert.dateExpiring}</Table.Cell>
-                            <Table.Cell>{advert.technologies.map((technology, index) => <span key={index}>{technology}{index < advert.technologies.length - 1 ? ', ' : ''}</span>)
+                            <Table.Cell>{advert.technologies.map((technology, index) => <span
+                                key={index}>{technology}{index < advert.technologies.length - 1 ? ', ' : ''}</span>)
 
                             }</Table.Cell>
                         </Table.Row>)}

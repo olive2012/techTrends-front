@@ -51,7 +51,7 @@ const AppProvider = (props) => {
                 console.log(response);
                 setState(oldState => ({...oldState, allAdverts: response.data}));
             })
-    }
+    };
 
     const getAdvertsByTechnology = (technology) => {
         if (!technology) {
@@ -75,7 +75,6 @@ const AppProvider = (props) => {
                 .then(response => {
                     console.log(response);
                     let filteredAdverts = response.data;
-
                     if (city && salary) {
                         console.log("city: " + city + ", salary: " + salary);
                         filteredAdverts = response.data.filter(advert => advert.city === city && advert.minSalary >= salary);

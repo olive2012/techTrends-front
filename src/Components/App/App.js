@@ -3,7 +3,7 @@ import {AppContext} from "../AppContext/AppContext";
 import './App.css';
 import SearchField from "../Search/SearchField";
 import SearchField2 from "../Search/SearchField2";
-import {Container, Menu} from "semantic-ui-react";
+import {Container, Menu, Pagination} from "semantic-ui-react";
 import LoginForm from "../Login/LoginForm";
 import NotFound from "../NotFound/NotFound";
 import {A, navigate, useRoutes} from 'hookrouter';
@@ -166,6 +166,7 @@ function App() {
 
                 {routeResult || <NotFound/>}
 
+                 {/*<Pagination defaultActivePage={5} totalPages={10}/>*/}
             </Container>
 
             {/*<PostsList textColor="red"/>*/}

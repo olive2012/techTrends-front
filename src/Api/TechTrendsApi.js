@@ -61,8 +61,6 @@ export default class TechTrendsApi {
         let url = "/api/adverts";
         let config = {params: {}};
 
-        // criteria === '*' is a special case which means
-        // show all
         if (technology) {
             url += "/filter-technology";
             config.params = {technology: technology};
@@ -105,5 +103,4 @@ export default class TechTrendsApi {
         formData.set('password', password);
         return this.apiInstance.post("/public/users/registration", formData);
     }
-
 }
