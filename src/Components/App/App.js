@@ -1,9 +1,8 @@
 import React, {useContext, useEffect} from 'react';
 import {AppContext} from "../AppContext/AppContext";
 import './App.css';
-import SearchField from "../Search/SearchField";
-import SearchField2 from "../Search/SearchField2";
-import {Container, Menu, Pagination} from "semantic-ui-react";
+import SearchField2 from "../Search/SearchField";
+import {Container, Menu} from "semantic-ui-react";
 import LoginForm from "../Login/LoginForm";
 import NotFound from "../NotFound/NotFound";
 import {A, navigate, useRoutes} from 'hookrouter';
@@ -70,7 +69,8 @@ function App() {
                         <A href="/">Home Page</A>
                     </Menu.Item>
 
-                    <Menu.Item name='statistics' active={appState.navigationItem === 'statistics'} onClick={handleItemClick}>
+                    <Menu.Item name='statistics' active={appState.navigationItem === 'statistics'}
+                               onClick={handleItemClick}>
                         <A href="/statistics">Statistics</A>
                     </Menu.Item>
 
@@ -78,15 +78,18 @@ function App() {
 
                         {!appState.loggedIn ?
 
-                            <Menu.Item name='login' active={appState.navigationItem === 'login'} onClick={handleItemClick}>
+                            <Menu.Item name='login' active={appState.navigationItem === 'login'}
+                                       onClick={handleItemClick}>
                                 <A href="/login">Log In</A>
                             </Menu.Item> :
 
-                            <Menu.Item name='logout' active={appState.navigationItem === 'logout'} onClick={handleItemClick}>
+                            <Menu.Item name='logout' active={appState.navigationItem === 'logout'}
+                                       onClick={handleItemClick}>
                                 <A href="/logout">Log Out</A>
                             </Menu.Item>}
 
-                        <Menu.Item name='signup' active={appState.navigationItem === 'signup'} onClick={handleItemClick}>
+                        <Menu.Item name='signup' active={appState.navigationItem === 'signup'}
+                                   onClick={handleItemClick}>
                             <A href="/signup">Sign Up</A></Menu.Item>
                     </Menu.Menu>
                 </Menu>
@@ -95,7 +98,7 @@ function App() {
 
                 {routeResult || <NotFound/>}
 
-                 {/*<Pagination defaultActivePage={5} totalPages={10}/>*/}
+                {/*<Pagination defaultActivePage={5} totalPages={10}/>*/}
             </Container>
 
             {/*<PostsList textColor="red"/>*/}
