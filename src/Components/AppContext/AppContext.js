@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import TechTrendsApi from "../../Api/TechTrendsApi";
-import {Redirect} from "react-router-dom";
-import {navigate, useRedirect} from "hookrouter";
+import {navigate} from "hookrouter";
 
 const api = new TechTrendsApi();
 
@@ -46,6 +45,14 @@ const AppProvider = (props) => {
         }
     };
 
+    const getAllAdverts = () => {
+        api.getAllAdverts()
+            .then(response => {
+                console.log(response);
+                setState(oldState => ({...oldState, allAdverts: response.data}));
+            })
+    };
+
     const getAdvertsByTechnology = (technology) => {
         if (!technology) {
             setState(oldState => ({...oldState, adverts: []}));
@@ -58,6 +65,48 @@ const AppProvider = (props) => {
             })
     };
 
+    const getAdvertsVersion2 = (city, salary, technology) => {
+        // if (!criteria && criteria !== "*") {
+        //          setState(oldState => ({...oldState, adverts: []}));
+        //          return;
+        //      };
+        if (technology) {
+            api.getAdvertsByTechnology(city, salary, technology)
+                .then(response => {
+                    console.log(response);
+                    let filteredAdverts = response.data;
+                    if (city && salary) {
+                        console.log("city: " + city + ", salary: " + salary);
+                        filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase() && advert.minSalary >= salary);
+                    } else if (city) {
+                        console.log("city: " + city);
+                        filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase());
+                    } else if (salary) {
+                        console.log("salary: " + salary);
+                        filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
+                    }
+                    setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                });
+        } else {
+            api.getAllAdverts()
+                .then(response => {
+                    if (city && salary) {
+                        let filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase() && advert.minSalary >= salary);
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else if (city) {
+                        let filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase());
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else if (salary) {
+                        let filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
+                        setState(oldState => ({...oldState, adverts: filteredAdverts}));
+                    } else {
+                        setState(oldState => ({...oldState, adverts: []}));
+                        console.log("No criteria");
+                    }
+                })
+        }
+    };
+
     //method for checking if user is logged in. If no - returns false
     const checkLoginState = () => {
         console.log("message from checkLoginState");
@@ -68,26 +117,14 @@ const AppProvider = (props) => {
             setState(state => ({...state, loggedIn: false}));
             return false;
         }
+        console.log(tokenToCheck);
+        console.log("Setting loggedIn");
+        setState(state => ({...state, loggedIn: true}));
+        return true;
 
-        if (api.checkToken(tokenToCheck)) {
-            console.log(tokenToCheck);
-            console.log("Setting loggedIn");
-            setState(state => ({...state, loggedIn: true}));
-            return true;
-        }
-        setState(state => ({...state, loggedIn: false}));
-        return false;
+        // setState(state => ({...state, loggedIn: false}));
+        // return false;
     };
-
-    // const showAuthPage = () => {
-    //     if (state.loggedIn) {
-    //         console.log("message from AuthPage OK");
-    //         return <Redirect to='/search-field'/>;
-    //     } else {
-    //         console.log("message from AuthPage NOT OK");
-    //         return <h3>User not loggedIn</h3>;
-    //     }
-    // };
 
     const login = (username, password) => {
         api.login(username, password)
@@ -96,23 +133,27 @@ const AppProvider = (props) => {
                 console.log("message from login, login token -" + response.data);
                 checkLoginState();
             })
-
+            .catch(error => {
+                window.alert("The e-mail address and/or password you specified are not correct.")
+            })
     };
 
     const logout = () => {
         window.localStorage.clear();
-        //setState(state => ({state: defaultState}));
         setState(state => ({
             ...state,
             adverts: [],
+            allAdverts: [],
+            filteredAdverts: [],
             navigationItem: 'home',
             advertsCriteria: '',
             advertsTechnology: '',
-            loggedIn: false
+            loggedIn: false,
+            advertsByCity: '',
+            advertsByTechnology: '',
+            advertsBySalary: ''
         }));
-        //useRedirect('/', '/');
         return navigate('/');
-        //return <Redirect to='/search-field'/>;
     };
 
     const registerNewUser = (username, password) => {
@@ -125,7 +166,6 @@ const AppProvider = (props) => {
                 console.log(error.data);
                 window.alert(error.data);
             })
-
     };
 
     const defaultState = {
@@ -134,16 +174,19 @@ const AppProvider = (props) => {
         navigationItem: null,
         advertsCriteria: null,
         advertsTechnology: null,
-        posts: [],
-        // api: api,
+
+        advertsByCity: null,
+        advertsBySalary: null,
+        advertsByTechnology: null,
+
         loggedIn: false,
         searchBy: SEARCHBY.CRITERIA,
         actions: {
-            // updatePosts: updatePosts,
-            // renewPosts: renewPosts,
             getAdverts: getAdverts,
+            getAllAdverts: getAllAdverts,
             getAdvertsByTechnology: getAdvertsByTechnology,
-            checkLoginState: checkLoginState,
+            getAdvertsVersion2: getAdvertsVersion2,
+            //checkLoginState: checkLoginState,
             login: login,
             logout: logout,
             registerNewUser: registerNewUser
