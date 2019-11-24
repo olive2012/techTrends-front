@@ -77,12 +77,12 @@ const AppProvider = (props) => {
                     let filteredAdverts = response.data;
                     if (city && salary) {
                         console.log("city: " + city + ", salary: " + salary);
-                        filteredAdverts = response.data.filter(advert => advert.city === city && advert.minSalary >= salary);
+                        filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase() && advert.minSalary >= salary);
                     } else if (city) {
                         console.log("city: " + city);
-                        filteredAdverts = response.data.filter(advert => advert.city === city);
+                        filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase());
                     } else if (salary) {
-                        console.log("city: " + city);
+                        console.log("salary: " + salary);
                         filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
                     }
                     setState(oldState => ({...oldState, adverts: filteredAdverts}));
@@ -91,17 +91,17 @@ const AppProvider = (props) => {
             api.getAllAdverts()
                 .then(response => {
                     if (city && salary) {
-                        let filteredAdverts = response.data.filter(advert => advert.city === city && advert.minSalary >= salary);
+                        let filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase() && advert.minSalary >= salary);
                         setState(oldState => ({...oldState, adverts: filteredAdverts}));
                     } else if (city) {
-                        let filteredAdverts = response.data.filter(advert => advert.city === city);
+                        let filteredAdverts = response.data.filter(advert => advert.city.toLowerCase() === city.toLowerCase());
                         setState(oldState => ({...oldState, adverts: filteredAdverts}));
                     } else if (salary) {
                         let filteredAdverts = response.data.filter(advert => advert.minSalary >= salary);
                         setState(oldState => ({...oldState, adverts: filteredAdverts}));
                     } else {
                         setState(oldState => ({...oldState, adverts: []}));
-                        console.log("No criteria")
+                        console.log("No criteria");
                     }
                 })
         }
@@ -117,26 +117,14 @@ const AppProvider = (props) => {
             setState(state => ({...state, loggedIn: false}));
             return false;
         }
+        console.log(tokenToCheck);
+        console.log("Setting loggedIn");
+        setState(state => ({...state, loggedIn: true}));
+        return true;
 
-        if (api.checkToken(tokenToCheck)) {
-            console.log(tokenToCheck);
-            console.log("Setting loggedIn");
-            setState(state => ({...state, loggedIn: true}));
-            return true;
-        }
-        setState(state => ({...state, loggedIn: false}));
-        return false;
+        // setState(state => ({...state, loggedIn: false}));
+        // return false;
     };
-
-    // const showAuthPage = () => {
-    //     if (state.loggedIn) {
-    //         console.log("message from AuthPage OK");
-    //         return <Redirect to='/search-field'/>;
-    //     } else {
-    //         console.log("message from AuthPage NOT OK");
-    //         return <h3>User not loggedIn</h3>;
-    //     }
-    // };
 
     const login = (username, password) => {
         api.login(username, password)
@@ -191,8 +179,6 @@ const AppProvider = (props) => {
         advertsBySalary: null,
         advertsByTechnology: null,
 
-        //posts: [],
-        // api: api,
         loggedIn: false,
         searchBy: SEARCHBY.CRITERIA,
         actions: {
@@ -200,7 +186,7 @@ const AppProvider = (props) => {
             getAllAdverts: getAllAdverts,
             getAdvertsByTechnology: getAdvertsByTechnology,
             getAdvertsVersion2: getAdvertsVersion2,
-            checkLoginState: checkLoginState,
+            //checkLoginState: checkLoginState,
             login: login,
             logout: logout,
             registerNewUser: registerNewUser
